@@ -6,12 +6,14 @@ nr_timePoints = 225;
 nr_subjects = length(subjects);
 nr_conditions = length(conditions);
 
+study_path = 'EEG_txtfiles_RSA';
+
 Timepoint_RDMs = zeros(nr_conditions,nr_conditions,nr_timePoints,nr_subjects);
 
 for currSubject = 1:nr_subjects
     Ave_Conditions = zeros(nr_electrodes,nr_timePoints,nr_conditions);
     for i = 1:nr_conditions
-        Ave_Conditions(:,:,i) = table2array(readtable(strcat(subjects{currSubject}, '_faces_Ave_', conditions{i}, '.txt'),'ReadRowNames',true));
+        Ave_Conditions(:,:,i) = table2array(readtable(fullfile(study_path, strcat(subjects{currSubject}, '_faces_Ave_', conditions{i}, '.txt')),'ReadRowNames',true));
     end
     A = zeros(nr_electrodes,nr_conditions,nr_timePoints);
     for i = 1:nr_timePoints

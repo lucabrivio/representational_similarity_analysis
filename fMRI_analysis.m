@@ -23,6 +23,6 @@ for currSubject = 1 : nr_subjects
     fMRI_dataset.sa.chunks = ones(nr_conditions, 1);
     % fMRI_dataset.sa.targets = repelem(1 : nr_conditions, 400000)';
     % dsm1=cosmo_squareform(cosmo_pdist(fMRI_dataset.samples, 'correlation'))
-    dsm = cosmo_dissimilarity_matrix_measure(fMRI_dataset);
+    dsm = cosmo_dissimilarity_matrix_measure(fMRI_dataset, 'metric', 'spearman');
     fMRI_dsm(:,:,currSubject) = cosmo_squareform(dsm.samples);
 end

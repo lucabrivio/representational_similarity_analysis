@@ -42,6 +42,7 @@ for currSubject = 1 : nr_subjects
     neighborhood = cosmo_spherical_neighborhood(fMRI_dataset, 'radius', 4);
     args = struct();
     args.target_dsm = EEG_timepoint_RDMs(:,:,1,currSubject);
-    args.metric = 'spearman';
-    ds_rsa = cosmo_searchlight(fMRI_dataset, neighborhood, @cosmo_target_dsm_corr_measure, args);
+    args.metric = 'correlation';
+    rsa_time1 = cosmo_searchlight(fMRI_dataset, neighborhood, @cosmo_target_dsm_corr_measure, args);
+    cosmo_plot_slices(rsa_time1);
 end

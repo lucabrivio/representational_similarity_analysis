@@ -11,6 +11,8 @@ nr_conditions = length(conditions);
 
 % EEG
 EEG_timepoint_RDMs = zeros(nr_conditions,nr_conditions,nr_timePoints,nr_subjects);
+EEG_mean_RDMs = zeros(nr_conditions,nr_conditions,nr_subjects);
+% EEG_means_RDMs = zeros(nr_conditions,nr_conditions,(nr_timePoints / 10), nr_subjects);
 for currSubject = 1:nr_subjects
     Ave_Conditions = zeros(nr_electrodes,nr_timePoints,nr_conditions);
     for i = 1:nr_conditions
@@ -21,7 +23,10 @@ for currSubject = 1:nr_subjects
         A(:,:,i) = Ave_Conditions(:,i,:);
         EEG_timepoint_RDMs(:,:,i,currSubject) = 1 - corrcoef(A(:,:,i));
     end
-%     Mean_RDM = mean(EEG_timepoint_RDMs,3);
+    EEG_mean_RDMs(:,:,currSubject) = mean(EEG_timepoint_RDMs,3);
+    % for i = 1:10:nr_timePoints
+    % EEG_means_RDMs(:,:,...)...
+    % end
 end
 
 
@@ -41,8 +46,10 @@ for currSubject = 1 : nr_subjects
 
     neighborhood = cosmo_spherical_neighborhood(fMRI_dataset, 'radius', 4);
     args = struct();
-    args.target_dsm = EEG_timepoint_RDMs(:,:,1,currSubject);
+    % args.target_dsm = EEG_timepoint_RDMs(:,:,1,currSubject);
+    args.target_dsm = EEG_mean_RDMs(:,:,1,currSubject);
     args.metric = 'correlation';
-    rsa_time1 = cosmo_searchlight(fMRI_dataset, neighborhood, @cosmo_target_dsm_corr_measure, args);
-    cosmo_plot_slices(rsa_time1);
+    % rsa_time1 = cosmo_searchlight(fMRI_dataset, neighborhood, @cosmo_target_dsm_corr_measure, args);
+    rsa_timeAvg = cosmo_searchlight(fMRI_dataset, neighborhood, @cosmo_target_dsm_corr_measure, args);
+    cosmo_plot_slices(rsa_timeAvg);
 end
